@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>教师界面</title>
+    <meta name="description" content="这是教师主页">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="../img/ahut.ico">
+    <link rel="stylesheet" href="../amazeui/css/amazeui.min.css" />
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body style="margin-left: 10px; overflow: hidden;">
+
+<div id="ref_page" class="am-g" style="height: 300px;">
+
+    <div class="tpl-content-page-title" style="margin-bottom: 10px;">教师分组信息</div>
+    <div class="am-panel am-panel-default">
+        <div class="am-panel-bd am-scrollable-horizontal">
+
+            <div class="am-u-sm-12">
+                <table class="am-table am-table-centered table-main">
+                    <thead>
+                    <tr>
+                        <th class="table-title">姓名</th>
+                        <th>所在验收/答辩组</th>
+                        <th>是否为验收/答辩组组长</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tinfo"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../amazeui/js/amazeui.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $.get('/graduation/adminController/getAllTeacherYansou',function(data){
+            $(data).each(function(index,value){
+                var td1=$('<td>').addClass('am-text-middle').append($('<span>').text(value.teacher.user.userName));
+                var is_leader;
+                var isselectA1 = '';
+                var isselectB1 = '';
+                var isselectC1 = '';
+                var isselectD1 = '';
+                var isselectE1 = '';
+                var isselectA2 = '';
+                var isselectB2 = '';
+                var isselectC2 = '';
+                if(value.yansouTeam==null){
+                    isselectB1 = "selected";
+                    isselectC2 = "selected";
+                    var select1=$('<select id="ysxz'+index+'"><option value="1" '+isselectA1+'>验收一组</option><option value="2" '+isselectB1+'>空</option><option value="3" '+isselectC1+'>验收二组</option><option value="4" '+isselectD1+'>验收三组</option><option value="5" '+isselectE1+'>验收四组</option></select>')
+                    var td2=$('<td>').addClass('am-text-middle').append(select1);
+                    is_leader='空';
+                    var select2=$('<select id="zz'+index+'"><option value="1" '+isselectA2+'>是</option><option value="2" '+isselectB2+'>否</option><option value="3" '+isselectC2+'>空</option></select>')
+                    var td3=$('<td>').addClass('am-text-middle').append(select2);
+                }
+                else{
+                    if(value.yansouTeam.yansouTeamName=='验收一组'){
+                        isselectA1="selected";
+                        var select1=$('<select id="ysxz'+index+'"><option value="1" '+isselectA1+'>验收一组</option><option value="2" '+isselectB1+'>空</option><option value="3" '+isselectC1+'>验收二组</option><option value="4" '+isselectD1+'>验收三组</option><option value="5" '+isselectE1+'>验收四组</option></select>')
+                        var td2=$('<td>').addClass('am-text-middle').append(select1);
+                    }
+                    else if(value.yansouTeam.yansouTeamName=='验收二组'){
+                        isselectC1="selected";
+                        var select1=$('<select id="ysxz'+index+'"><option value="1" '+isselectA1+'>验收一组</option><option value="2" '+isselectB1+'>空</option><option value="3" '+isselectC1+'>验收二组</option><option value="4" '+isselectD1+'>验收三组</option><option value="5" '+isselectE1+'>验收四组</option></select>')
+                        var td2=$('<td>').addClass('am-text-middle').append(select1);
+                    }
+                    else if(value.yansouTeam.yansouTeamName=='验收三组'){
+                        isselectD1="selected";
+                        var select1=$('<select id="ysxz'+index+'"><option value="1" '+isselectA1+'>验收一组</option><option value="2" '+isselectB1+'>空</option><option value="3" '+isselectC1+'>验收二组</option><option value="4" '+isselectD1+'>验收三组</option><option value="5" '+isselectE1+'>验收四组</option></select>')
+                        var td2=$('<td>').addClass('am-text-middle').append(select1);
+                    } else if(value.yansouTeam.yansouTeamName=='验收四组'){
+                        isselectE1='selected';
+                        var select1=$('<select id="ysxz'+index+'"><option value="1" '+isselectA1+'>验收一组</option><option value="2" '+isselectB1+'>空</option><option value="3" '+isselectC1+'>验收二组</option><option value="4" '+isselectD1+'>验收三组</option><option value="5" '+isselectE1+'>验收四组</option></select>')
+                        var td2=$('<td>').addClass('am-text-middle').append(select1);
+                    }
+                    if(value.isLeader==1){
+                        isselectA2="selected";
+                        var select2=$('<select id="zz'+index+'"><option value="1" '+isselectA2+'>是</option><option value="2" '+isselectB2+'>否</option><option value="3" '+isselectC2+'>空</option></select>')
+                    }else{
+                        isselectB2="selected";
+                        var select2=$('<select id="zz'+index+'"><option value="1" '+isselectA2+'>是</option><option value="2" '+isselectB2+'>否</option><option value="3" '+isselectC2+'>空</option></select>')
+                    }
+                    var td3=$('<td>').addClass('am-text-middle').append(select2);
+                }
+                var btn1=$('<button type="button">').attr('name','btn1').addClass('btn btn-primary').text('修改');
+                var td4=$('<td class="User_Action_btn">').append(btn1)
+                $('#tinfo').append($('<tr>').append(td1).append(td2).append(td3).append(td4));
+                td4.find('button').click(value,function (event){
+                    var ysxz=$("#ysxz"+index+" option:selected").text();
+                    var zz=$("#zz"+index+" option:selected").text();
+                    $.ajax({
+                        url:'/graduation/adminController/updateTeacherYansou',
+                        type:'post',
+                        data:{"teacherId":value.teacher.teacherId,"yansouteamName":ysxz,"isLeader":zz},
+                        dataType:'json',
+                        success:function (){
+                            layer.alert('更新成功！',{
+                                title: '提示框',
+                                icon:1,
+                            });
+                        }
+                    })
+                });
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

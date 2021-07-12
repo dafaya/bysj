@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>管理员界面</title>
+    <meta name="description" content="这是管理员主页">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="../img/ahut.ico">
+    <link rel="stylesheet" href="../amazeui/css/amazeui.min.css" />
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body style="margin-left: 10px;overflow:hidden;" >
+<div id="ref_page">
+
+    <div class="tpl-content-page-title" style="margin-bottom: 10px;">
+        内容概要</div>
+    <ol class="am-breadcrumb">
+        <li><a href="acontent.html" class="am-icon-home">首页</a></li>
+        <li class="am-active">内容</li>
+    </ol>
+
+    <div class="row">
+        <div class="am-u-lg-4 am-u-md-12 am-u-sm-12">
+            <div class="dashboard-stat blue">
+                <div class="am-g" style="height: 95px;">
+                    <div class="visual">
+                        <i class="am-icon-location-arrow"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number">当前用户</div>
+                        <div class="desc" id="workTime"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="am-u-lg-4 am-u-md-12 am-u-sm-12" style="float: left;">
+            <div class="dashboard-stat green">
+                <div class="visual">
+                    <i class="am-icon-bar-chart-o"></i>
+                </div>
+                <div class="details">
+                    <div class="number" id="num1"></div>
+                    <div class="desc">教师人数</div>
+                </div>
+            </div>
+        </div>
+        <div class="am-u-lg-4 am-u-md-12 am-u-sm-12" style="float: left;">
+            <div class="dashboard-stat red">
+                <div class="visual">
+                    <i class="am-icon-users"></i>
+                </div>
+                <div class="details">
+                    <div class="number" id="num2"></div>
+                    <div class="desc">学生人数</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="am-panel am-panel-default"
+         style="margin: -5px 0 0 -4px;">
+        <div class="am-panel-bd">
+            <h2 class="tpl-content-page-title">
+                相关提示 :
+            </h2>
+            <ul class="am-list am-list-static am-list-border">
+                <li><i class="am-icon-pencil am-icon-exclamation-circle"></i>
+                    管理员可以修改教师和学生的信息，学生和教师的初始密码与账号相同</li>
+                <li><i class="am-icon-pencil am-icon-exclamation-circle"></i>
+                    答辩小组的数量固定与当届学生数量所匹配</li>
+                <li><i class="am-icon-pencil am-icon-exclamation-circle"></i>
+                    学生选题后，老师需在【确认选题】处确认选择学生以完成双选，如果超时未选择，将默认该学生选择成功</li>
+                <li><i class="am-icon-pencil am-icon-exclamation-circle"></i>
+                    教师可以在【流程管理】处对学生的开题报告，论文，免答辩申请给出审核意见，对学生成绩进行评定</li>
+                <li><i class="am-icon-pencil am-icon-exclamation-circle"></i>
+                    使用原始密码登录的管理员，请尽快更改密码</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min.js"></script>
+<script src="../amazeui/js/amazeui.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+
+        var date=new Date();
+        var thisDate=date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+        $.get('/graduation/workTimeController/getWorkTime',{
+            date:thisDate
+        },function(data){
+            if(data.workTimeInfo!=null){
+                $('#workTime').text(data.workTimeInfo);
+            }
+        });
+
+        $.get('/graduation/teacherController/getTeacherNum',function(data){
+            if(data!=null){
+                $('#num1').text(data);
+            }
+        });
+
+        $.get('/graduation/studentController/getStudentNum',function(data){
+            if(data!=null){
+                $('#num2').text(data);
+            }
+        });
+
+    });
+</script>
+</body>
+
+</html>
